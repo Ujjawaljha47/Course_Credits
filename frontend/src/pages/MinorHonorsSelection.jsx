@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MinorHonorsSelection.css";
 import { FaTrash } from "react-icons/fa";
+import { API_URL } from "../config/apiConfig";
 
 const MinorHonorsSelection = () => {
     const [student, setStudent] = useState(null);
@@ -9,19 +10,24 @@ const MinorHonorsSelection = () => {
     const [selectedCourse, setSelectedCourse] = useState("");
     const [addedCourses, setAddedCourses] = useState([]);
 
-    const rollNo = "CS22BT004"; // temporary
+    const rollNo = "CS22BT004"; // hardcoded
 
     // Fetch student
     useEffect(() => {
-        fetch(`/api/student/me`)
-            .then(res => res.json())
-            .then(data => setStudent(data))
+        fetch(`${API_URL}/api/student/me`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Server error while fetching student");
+                }
+                return res.json();
+            })
+            .then(data => setStudent(data[0]))
             .catch(err => console.error(err));
     }, []);
 
     // Fetch electives
     useEffect(() => {
-    fetch(`/api/electives`)
+    fetch(`${API_URL}/api/electives`)
         .then(res => {
             if (!res.ok) {
                 throw new Error("Server error while fetching electives");
@@ -29,7 +35,7 @@ const MinorHonorsSelection = () => {
             return res.json();
         })
         .then(data => {
-            console.log("Electives:", data);
+            // console.log("Electives:", data);
             setCourses(data);
         })
         .catch(err => console.error(err));

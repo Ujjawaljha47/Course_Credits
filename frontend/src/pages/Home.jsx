@@ -12,6 +12,9 @@ const Home = () => {
         <button onClick={() => navigate('/selection')}>
           Select Courses
         </button>
+        <button onClick={() => navigate('/minor-honors')}>
+          Select Minor or Honors Courses
+        </button>
       </div>
     </div>
   );

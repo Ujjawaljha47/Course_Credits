@@ -335,33 +335,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CourseSelection.css";
+import { API_URL } from "../config/apiConfig";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const CourseSelection = () => {
   const [groupedData, setGroupedData] = useState({});
@@ -374,7 +352,7 @@ const CourseSelection = () => {
 
   // Fetch Data
   useEffect(() => {
-    fetch("http://localhost:5000/api/students")
+    fetch(`${API_URL}/api/students`)
       .then((res) => res.json())
       .then((data) => {
         groupByStudent(data);
@@ -532,16 +510,16 @@ const CourseSelection = () => {
         onClick={() => navigate("/")}
         style={{
           marginBottom: "5px",
-          padding: "3px 5px",
-          backgroundColor: "#2e2121",
+          padding: "4px 5px",
+          backgroundColor: "#9026e7",
           color: "white",
-          textSize:"6px",
+          textSize:"5px",
           border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
+          borderRadius: "10px",
+          cursor: "pointer"
         }}
       >
-        Back
+        <i className="fas fa-arrow-left"></i>
       </button></h2>
 
       {/* Pagination */}
