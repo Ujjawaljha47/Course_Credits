@@ -47,7 +47,14 @@ app.get('/api/students', async (req, res) => {
 
 app.get("/api/student/me", async (req, res) => {
     try {
-        const rollNo = "CS22BT004"; // test roll
+
+        const rollNo = req.query.rollNo;
+
+        if (!rollNo) {
+            return res.status(400).json({
+                message: "Roll Number is required"
+            });
+        }
 
         const pool = await poolPromise;
 
@@ -55,14 +62,15 @@ app.get("/api/student/me", async (req, res) => {
             .request()
             .input("rollNo", sql.VarChar, rollNo)
             .query(`
-    SELECT DISTINCT
+SELECT
     s.RollNo,
     s.StudentName,
-    s.ProgramName,
+    s.ProgramName, 
     s.TotalEarnedCredits,
     s.CPI,
     m.MandatoryCourseCredits,
-    d.Semester
+    d.Semester,
+    p.ProgramID
 FROM ACADEMICS.dbo.VW_SP_StudentCPIDetails s
 INNER JOIN ACADEMICS.dbo.ProgramMaster p
     ON s.ProgramName = p.ProgramName
@@ -72,17 +80,25 @@ INNER JOIN ACADEMICS.dbo.VW_StudentDetails d
     ON s.RollNo = d.RollNo
 WHERE d.RollNo = @rollNo
 AND d.Semester = 08
+AND d.Batch=m.Batch
 AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
-  `);
+`);
 
-        console.log("DB Result:", result.recordset);
+        if (result.recordset.length === 0) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
 
-        res.json(result.recordset);   // VERY IMPORTANT
+        res.json(result.recordset);
+
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: err.message });
     }
 });
+
+
 
 
 // app.get("/api/student/me", async (req, res) => {
@@ -95,53 +111,56 @@ AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
 //             .request()
 //             .input("rollNo", sql.VarChar, rollNo)
 //             .query(`
-// SELECT
+//     SELECT
 //     s.RollNo,
 //     s.StudentName,
 //     s.ProgramName,
 //     s.TotalEarnedCredits,
 //     s.CPI,
 //     m.MandatoryCourseCredits,
-//     d.Semester
+//     d.Semester,
+//     p.ProgramID
 // FROM ACADEMICS.dbo.VW_SP_StudentCPIDetails s
-// LEFT JOIN ACADEMICS.dbo.ProgramMaster p
+// INNER JOIN ACADEMICS.dbo.ProgramMaster p
 //     ON s.ProgramName = p.ProgramName
-// LEFT JOIN (
-//     SELECT ProgramID, MAX(MandatoryCourseCredits) AS MandatoryCourseCredits
-//     FROM ACADEMICS.dbo.MandatoryCourseCredits
-//     GROUP BY ProgramID
-// ) m
+// INNER JOIN ACADEMICS.dbo.MandatoryCourseCredits m
 //     ON p.ProgramID = m.ProgramID
-// LEFT JOIN ACADEMICS.dbo.VW_StudentDetails d
+// INNER JOIN ACADEMICS.dbo.VW_StudentDetails d
 //     ON s.RollNo = d.RollNo
-// WHERE s.RollNo = @rollNo
-// AND d.Semester = '08'
-//             `);
+// WHERE d.RollNo = @rollNo
+// AND d.Semester = 08
+// AND d.Batch=m.Batch
+// AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
+//   `);
 
-//         console.log("DB Result:", result.recordset); // <--- Important
-//         res.json(result.recordset[0] || {});        // <--- Always send JSON
+//         console.log("DB Result:", result.recordset);
 
+//         res.json(result.recordset);   // VERY IMPORTANT
 //     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: "Server error" });
+//         console.log(err);
+//         res.status(500).json({ error: err.message });
 //     }
 // });
+
 
 app.get("/api/electives", async (req, res) => {
     try {
 
-        const rollNo = "CS22BT004";
+        const rollNo = req.query.rollNo;
 
         const pool = await poolPromise;
 
-        const result = await pool.request().query(`
+        const result = await pool
+            .request()
+            .input("rollNo", sql.VarChar, rollNo)
+            .query(`
       SELECT 
     CourseCode,
     CourseName,
     Credits,
     ElectiveType
 FROM VW_SP_StudentRegisteredCourseDetails
-WHERE RollNo = 'CS22BT004'
+WHERE RollNo = @rollNo
 AND ElectiveType NOT IN ('Core Courses', 'Audit Courses');
     `);
 

@@ -4,6 +4,7 @@
   max-width: 1440px;
   margin: auto;
   background-color: rgb(11, 11, 11);
+  color: black;
 }
 
 /* Page title */
@@ -70,7 +71,7 @@
   padding: 8px 12px;
   border: none;
   background-color: #9026e7;
-  color: white;
+  color: rgb(5, 5, 5);
   border-radius: 5px;
   cursor: pointer;
 }
