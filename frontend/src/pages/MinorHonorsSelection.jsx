@@ -12,21 +12,6 @@ const MinorHonorsSelection = () => {
 
     const rollNo = "EP22BT008"; // hardcoded
 
-    // const rollNo = localStorage.getItem("rollNo");
-
-    // Fetch student
-    // useEffect(() => {
-    //     fetch(`${API_URL}/api/student/me`)
-    //         .then(res => {
-    //             if (!res.ok) {
-    //                 throw new Error("Server error while fetching student");
-    //             }
-    //             return res.json();
-    //         })
-    //         .then(data => setStudent(data[0]))
-    //         .catch(err => console.error(err));
-    // }, []);
-
 
 useEffect(() => {
     fetch(`${API_URL}/api/student/me?rollNo=${rollNo}`)

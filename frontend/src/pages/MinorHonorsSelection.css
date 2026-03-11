@@ -156,23 +156,50 @@ table th {
 }
 
 .cancel-btn {
-  background: #e74c3c;
+  background: #c0392b;
   color: white;
   border: none;
+  margin-right: 2px;
   padding: 8px 18px;
   border-radius: 6px;
   cursor: pointer;
-  text-align: center
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.cancel-btn:hover {
+  background: #e74c3c;
+  transform: translateY(2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Click effect */
+.cancel-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .submit-btn {
-  background: #2ecc71;
+  background: #27ae60;
   color: white;
   border: none;
   padding: 8px 18px;
   border-radius: 6px;
   cursor: pointer;
-  text-align: center
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.submit-btn:hover {
+  background: #2ecc71;
+  transform: translateY(2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.cancel-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 768px) {
