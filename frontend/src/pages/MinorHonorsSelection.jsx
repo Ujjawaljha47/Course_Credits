@@ -10,7 +10,8 @@ const MinorHonorsSelection = () => {
     const [selectedCourse, setSelectedCourse] = useState("");
     const [addedCourses, setAddedCourses] = useState([]);
 
-    const rollNo = "EP22BT008"; // hardcoded
+    const params = new URLSearchParams(window.location.search);
+    const rollNo = params.get("rollNo");
 
 
 useEffect(() => {
