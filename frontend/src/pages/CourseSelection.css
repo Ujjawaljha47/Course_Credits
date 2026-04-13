@@ -1,0 +1,86 @@
+/* Main container */
+.container {
+  padding: 20px;
+  max-width: 1440px;
+  margin: auto;
+  background-color: rgb(11, 11, 11);
+  color: black;
+}
+
+/* Page title */
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Grid layout */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Student card */
+.student-card {
+  background-color: #f0e2f4;
+  color: #000;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.student-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Semester block */
+.semester-block {
+  margin-top: 15px;
+}
+
+.semester-block h4 {
+  margin-bottom: 10px;
+}
+
+/* No course text */
+.no-course {
+  color: red;
+  font-weight: normal;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .student-card {
+    padding: 15px;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+}
+
+.pagination {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.pagination button {
+  margin: 5px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #9026e7;
+  color: rgb(5, 5, 5);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #d7b4f3;
+  cursor: not-allowed;
+}
+
+.active-page {
+  background-color: #d7b4f3 !important;
+}

@@ -1,16 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-
+import MinorHonorsSelection from './pages/MinorHonorsSelection';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/courseselection">
       <Routes>
-        
         <Route path="/" element={<Home />} />
-        
-        
-        {/* <Route path="/selection" element={<CourseSelection />} /> */}
+        <Route path="/minor-honors" element={<MinorHonorsSelection />} />
       </Routes>
     </Router>
   );
