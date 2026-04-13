@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require("axios"); // add this at top
 const cors = require('cors');
 const { poolPromise } = require('./config/db');
 const sql = require("mssql");
@@ -8,7 +9,47 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+function findRollNo(obj) {
+  if (!obj || typeof obj !== "object") return null;
 
+  if ("RollNo" in obj) return obj.RollNo;
+
+  for (const key in obj) {
+    if (typeof obj[key] === "object") {
+      const result = findRollNo(obj[key]);
+      if (result) return result;
+    }
+  }
+
+  return null;
+}
+
+app.get("/api/current-user", async (req, res) => {
+    console.log("Query received:", req.query); 
+    console.log("serviceInputs:", req.query.serviceInputs); 
+  try {
+    const portalResponse = await axios.post(
+      "http://10.195.250.128/iProofService/api/RemoteGateway/GetSlotByUserMapId",
+      {
+        serviceName: "GetSlotByUserMapId",
+        serviceInputs: req.query.serviceInputs
+      },
+      {
+        headers: { Cookie: req.headers.cookie }, // forward user cookies
+      }
+    );
+
+    // Recursively search for RollNo
+    const rollNo = findRollNo(portalResponse.data);
+
+    if (!rollNo) return res.status(404).json({ message: "Roll number not found" });
+
+    res.json({ rollNo });
+  } catch (err) {
+    console.error("Error fetching roll number:", err.message);
+    res.status(500).json({ error: "Cannot fetch roll number" });
+  }
+});
 
 app.get('/api/students', async (req, res) => {
     try {
