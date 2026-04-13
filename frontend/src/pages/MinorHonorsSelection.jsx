@@ -3,41 +3,50 @@ import "./MinorHonorsSelection.css";
 import { FaTrash } from "react-icons/fa";
 import { API_URL } from "../config/apiConfig";
 
+const MINOR_COURSES = [
+    {CourseName: "Minor in Data Science and Artificial Intelligence" },
+    {CourseName: "Minor in Energy and Environment"},
+    {CourseName: "Minor in Computer Science and Engineering"},
+    { CourseName: "Minor in Smart Systems"},
+    { CourseName: "Minor in Mathematics"},
+];
+
 const MinorHonorsSelection = () => {
     const [student, setStudent] = useState(null);
     const [electiveType, setElectiveType] = useState("Minor");
     const [courses, setCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState("");
     const [addedCourses, setAddedCourses] = useState([]);
+    const [selectedMinorCourse, setSelectedMinorCourse] = useState(null);
 
     const params = new URLSearchParams(window.location.search);
     const rollNo = params.get("rollNo");
 
 
-useEffect(() => {
-    fetch(`${API_URL}/api/student/me?rollNo=${rollNo}`)
-        .then(async res => {
+    useEffect(() => {
+        fetch(`${API_URL}/api/student/me?rollNo=${rollNo}`)
+            .then(async res => {
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (!res.ok) {
-                alert(data.message);   //backend
-                return;
-            }
+                if (!res.ok) {
+                    alert(data.message);   //backend
+                    return;
+                }
 
-            if (!data || data.length === 0) {
-                alert("No student data found");  
-                return;
-            }
+                if (!data || data.length === 0) {
+                    alert("No student data found");
+                    return;
+                }
 
-            setStudent(data[0]);
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Error fetching student data");
-        });
+                setStudent(data[0]);
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Error fetching student data");
+            });
 
-}, []);
+    }, []);
 
 
 
@@ -59,25 +68,32 @@ useEffect(() => {
 
 
     const handleAdd = () => {
-        const course = courses.find(c => c.CourseCode === selectedCourse);
-        if (!course) return;
+        const course = courses.find((c) => c.CourseCode === selectedCourse);
+
+        if (!course) {
+            alert("Please select a course first.");
+            return;
+        }
 
         const newTotalCredits = totalCredits + course.Credits;
 
         if (newTotalCredits > extraEarnedCredits) {
-            alert("⚠️Credits exceed your Extra Earned Credits limit. Select accordingly.");
+            alert("⚠️ Credits exceed your Extra Earned Credits limit. Select accordingly.");
             return;
         }
 
-        if (!addedCourses.some(c => c.CourseCode === course.CourseCode)) {
-
-            const newCourse = {
-                ...course,
-                selectedCategory: electiveType
-            };
-
-            setAddedCourses([...addedCourses, newCourse]);
+        if (addedCourses.some((c) => c.CourseCode === course.CourseCode)) {
+            alert("This course is already added.");
+            return;
         }
+
+        const newCourse = {
+            ...course,
+            selectedCategory: electiveType,
+        };
+
+        setAddedCourses((prev) => [...prev, newCourse]);
+        setSelectedCourse(""); // reset dropdown after adding
     };
 
     const totalCredits = addedCourses.reduce(
@@ -94,10 +110,25 @@ useEffect(() => {
 
     const handleCancel = () => {
         setAddedCourses([]);
+        setSelectedMinorCourse(null);
     };
 
     const handleSubmit = () => {
+        // Enforce minor course selection when Minor is chosen
+        if (electiveType === "Minor" && !selectedMinorCourse) {
+            alert("⚠️ Please select one Minor course before submitting.");
+            return;
+        }
 
+        const payload = {
+            rollNo: student?.RollNo,
+            electiveType,
+            selectedMinorCourse: electiveType === "Minor" ? selectedMinorCourse : null,
+            addedCourses,
+        };
+
+        console.log("Submitting:", payload);
+        // TODO: Replace with your actual API POST call when ready
         alert("Submitted for Approval ✅");
     };
 
@@ -109,7 +140,7 @@ useEffect(() => {
 
     return (
         <>
-            <div className="page-header"></div> 
+            <div className="page-header"></div>
             <div className="page-wrapper">
                 <div className="minor-container">
                     <h1 className="page-title">Minor or Honors Selection</h1>
@@ -173,57 +204,7 @@ useEffect(() => {
                             </div>
                         )}
                     </div>
-            
 
-
-
-
-
-
-
-            {/* <div className="card">
-                <h2>Student Profile & Academic Standing</h2>
-
-
-                {student && (
-                    <div className="student-info">
-                        <div className="info-box">
-                            <label>Roll No</label>
-                            <p>{student?.RollNo}</p>
-                        </div>
-
-                        <div className="info-box">
-                            <label>Student Name</label>
-                            <p>{student?.StudentName}</p>
-                        </div>
-
-                        <div className="info-box">
-                            <label>Program</label>
-                            <p>{student?.ProgramName}</p>
-                        </div>
-
-                        <div className="info-box">
-                            <label>Mandatory Credits</label>
-                            <p>{student?.MandatoryCourseCredits}</p>
-                        </div>
-
-                        <div className="info-box">
-                            <label>Total Earned Credits</label>
-                            <p>{student?.TotalEarnedCredits}</p>
-                        </div>
-
-                        <div className="info-box">
-                            <label>Extra Earned Credits</label>
-                            <p>{extraEarnedCredits}</p>
-                        </div>
-
-                        <div className="info-box">
-                            <label>Over All CPI</label>
-                            <p>{student?.CPI}</p>
-                        </div>
-                    </div>
-                )}
-            </div> */}
 
                     {/* ---------------- COURSE MAPPING ---------------- */}
                     <div className="card">
@@ -254,26 +235,101 @@ useEffect(() => {
                                 </label>
                             </div>
                         </div>
+
+                        {/* ── Select One Minor Course (right below radio buttons) ── */}
+                        {electiveType === "Minor" && (
+                            <div style={{ marginTop: "20px" }}>
+                                <p style={{ fontWeight: "600", marginBottom: "10px" }}>
+                                    Select One Minor Course <span style={{ color: "red" }}>*</span>
+                                </p>
+
+                                {!selectedMinorCourse ? (
+                                    <div className="table-wrapper">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Select</th>
+                                                    <th>Course Code</th>
+                                                    <th>Course Name</th>
+                                                    <th>Credits</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {MINOR_COURSES.map((course) => (
+                                                    <tr key={course.CourseCode}>
+                                                        <td>
+                                                            <input
+                                                                type="radio"
+                                                                name="minorCourse"
+                                                                value={course.CourseCode}
+                                                                onChange={() => setSelectedMinorCourse(course)}
+                                                            />
+                                                        </td>
+                                                        <td>{course.CourseCode}</td>
+                                                        <td>{course.CourseName}</td>
+                                                        <td>
+                                                            <span className="credit-badge">{course.Credits}</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                ) : (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "16px",
+                                            padding: "12px 16px",
+                                            backgroundColor: "#f3e8ff",
+                                            border: "1px solid #9026e7",
+                                            borderRadius: "8px",
+                                            width: "fit-content",
+                                        }}
+                                    >
+                                        <span style={{ fontWeight: "600", color: "#9026e7" }}>
+                                            ✅ {selectedMinorCourse.CourseCode} — {selectedMinorCourse.CourseName} ({selectedMinorCourse.Credits} Credits)
+                                        </span>
+                                        <button
+                                            onClick={() => setSelectedMinorCourse(null)}
+                                            style={{
+                                                background: "none",
+                                                border: "1px solid #9026e7",
+                                                borderRadius: "5px",
+                                                color: "#9026e7",
+                                                cursor: "pointer",
+                                                padding: "3px 10px",
+                                                fontSize: "13px",
+                                            }}
+                                        >
+                                            Change
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+
+
                         <div className="dropdown-section">
                             <select
                                 value={selectedCourse}
                                 onChange={(e) => setSelectedCourse(e.target.value)}
                             >
                                 <option value="">Select Course</option>
-
                                 {courses
-                                    .filter(c => c.ElectiveType !== "Core courses" && c.ElectiveType !== "Audit Courses" && 
-                                        !addedCourses.some(a => a.CourseCode === c.CourseCode)
+                                    .filter(
+                                        (c) =>
+                                            c.ElectiveType !== "Core courses" &&
+                                            c.ElectiveType !== "Audit Courses" &&
+                                            !addedCourses.some((a) => a.CourseCode === c.CourseCode)
                                     )
-                                    .map(course => {
-                                        const text = `${course.CourseCode} - ${course.CourseName}`;
-                                        const paddedText = text.padEnd(40, " "); // spacing
-                                        return (
-                                            <option key={course.CourseCode} value={course.CourseCode}>
-                                                {`${course.CourseCode} - ${course.CourseName} (${course.Credits} Credits)`}
-                                            </option>
-                                        );
-                                    })}
+                                    .map((course) => (
+                                        <option key={course.CourseCode} value={course.CourseCode}>
+                                            {`${course.CourseCode} - ${course.CourseName} (${course.Credits} Credits)`}
+                                        </option>
+                                    ))}
                             </select>
 
                             <button className="add-btn" onClick={handleAdd}>
@@ -292,7 +348,7 @@ useEffect(() => {
                                         <th>Credits</th>
                                         <th>Elective Type</th>
                                         <th>Selected Category</th>
-                                        <th>Action</th> 
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -308,7 +364,7 @@ useEffect(() => {
                                             <td>{course.ElectiveType}</td>
 
                                             <td>{course.selectedCategory}</td>
-                                    
+
                                             <td>
                                                 <button
                                                     className="delete-icon-btn"
@@ -357,3 +413,4 @@ useEffect(() => {
 };
 
 export default MinorHonorsSelection;
+
