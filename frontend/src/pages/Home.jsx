@@ -9,6 +9,12 @@ const Home = () => {
       <div className="course-card">
         <h3>Ready to start?</h3>
         <p>Browse our catalog fetched from the database.</p>
+        <button onClick={() => navigate('/selection')}>
+          Select Courses
+        </button>
+        <button onClick={() => navigate('/minor-honors')}>
+          Select Minor or Honors Courses
+        </button>
         {/* <button onClick={() => navigate('/selection')}>
           Select Courses
         </button> */}
