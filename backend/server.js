@@ -5,41 +5,16 @@ const sql = require("mssql");
 
 
 const app = express();
-app.use(cors());
+app.use(cors()); 
 app.use(express.json());
 
 
-
-app.get('/api/students', async (req, res) => {
+app.get('/api/courses', async (req, res) => {
     try {
         const pool = await poolPromise;
-
-        const result = await pool.request().query(`
-            SELECT 
-                vs.StudentMasterID,
-                vs.RollNo,
-                vs.DisplayName,
-                vs.DegreeName,
-                vs.Semester AS CurrentSemester,
-                vsp.RegSemester AS RegisteredSemester,
-                vsp.CourseName,
-                vsp.Credits
-            FROM VW_StudentDetails vs
-            LEFT JOIN VW_SP_StudentRegisteredCourseDetails vsp
-                ON vs.StudentMasterID = vsp.StudentMasterID
-                AND vsp.RegSemester BETWEEN 1 AND 8
-            WHERE 
-                vs.DegreeName = 'BTech'
-                AND vs.Semester = 8
-            ORDER BY 
-                vs.RollNo,
-                vsp.RegSemester;
-        `);
-
+        const result = await pool.request().query('SELECT * FROM Courses');
         res.json(result.recordset);
-
     } catch (err) {
-        console.error("Error fetching students:", err);
         res.status(500).send(err.message);
     }
 });
@@ -183,8 +158,10 @@ AND ElectiveType NOT IN ('Core Courses', 'Audit Courses');
 // const PORT = process.env.PORT || 5000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, "0.0.0.0", () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
 
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
