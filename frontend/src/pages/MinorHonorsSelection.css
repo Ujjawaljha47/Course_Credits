@@ -28,7 +28,7 @@ html, body {
 /* ── Page Wrapper ── */
 .page-wrapper {
   width: 100%;           /* was 1000px — this was causing overflow */
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 20px auto;
   padding: 0 16px;
 }
