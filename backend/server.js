@@ -25,6 +25,8 @@ function findRollNo(obj) {
 }
 
 app.get("/api/current-user", async (req, res) => {
+    console.log("Query received:", req.query); 
+    console.log("serviceInputs:", req.query.serviceInputs); 
   try {
     const portalResponse = await axios.post(
       "http://10.195.250.128/iProofService/api/RemoteGateway/GetSlotByUserMapId",
@@ -84,65 +86,16 @@ app.get('/api/students', async (req, res) => {
 });
 
 
-app.get("/api/student/me", async (req, res) => {
-    try {
-
-        const rollNo = req.query.rollNo;
-
-        if (!rollNo) {
-            return res.status(400).json({
-                message: "Roll Number is required"
-            });
-        }
-
-        const pool = await poolPromise;
-
-        const result = await pool
-            .request()
-            .input("rollNo", sql.VarChar, rollNo)
-            .query(`
-SELECT
-    s.RollNo,
-    s.StudentName,
-    s.ProgramName, 
-    s.TotalEarnedCredits,
-    s.CPI,
-    m.MandatoryCourseCredits,
-    d.Semester,
-    p.ProgramID
-FROM ACADEMICS.dbo.VW_SP_StudentCPIDetails s
-INNER JOIN ACADEMICS.dbo.ProgramMaster p
-    ON s.ProgramName = p.ProgramName
-INNER JOIN ACADEMICS.dbo.MandatoryCourseCredits m
-    ON p.ProgramID = m.ProgramID
-INNER JOIN ACADEMICS.dbo.VW_StudentDetails d
-    ON s.RollNo = d.RollNo
-WHERE d.RollNo = @rollNo
-AND d.Semester = 08
-AND d.Batch=m.Batch
-AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
-`);
-
-        if (result.recordset.length === 0) {
-            return res.status(404).json({
-                message: "Student not found"
-            });
-        }
-
-        res.json(result.recordset);
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-
-
-
 // app.get("/api/student/me", async (req, res) => {
 //     try {
-//         const rollNo = "CS22BT004"; // test roll
+
+//         const rollNo = req.query.rollNo;
+
+//         if (!rollNo) {
+//             return res.status(400).json({
+//                 message: "Roll Number is required"
+//             });
+//         }
 
 //         const pool = await poolPromise;
 
@@ -150,10 +103,10 @@ AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
 //             .request()
 //             .input("rollNo", sql.VarChar, rollNo)
 //             .query(`
-//     SELECT
+// SELECT
 //     s.RollNo,
 //     s.StudentName,
-//     s.ProgramName,
+//     s.ProgramName, 
 //     s.TotalEarnedCredits,
 //     s.CPI,
 //     m.MandatoryCourseCredits,
@@ -170,16 +123,71 @@ AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
 // AND d.Semester = 08
 // AND d.Batch=m.Batch
 // AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
-//   `);
+// `);
 
-//         console.log("DB Result:", result.recordset);
+//         if (result.recordset.length === 0) {
+//             return res.status(404).json({
+//                 message: "Student not found"
+//             });
+//         }
 
-//         res.json(result.recordset);   // VERY IMPORTANT
+//         res.json(result.recordset);
+
 //     } catch (err) {
 //         console.log(err);
 //         res.status(500).json({ error: err.message });
 //     }
 // });
+
+
+
+
+app.get("/api/student/me", async (req, res) => {
+    try {
+        const rollNo = req.query.rollNo;  
+
+        if (!rollNo) {
+            return res.status(400).json({
+                message: "Roll Number is required"
+            });
+        }
+
+        const pool = await poolPromise;
+
+        const result = await pool
+            .request()
+            .input("rollNo", sql.VarChar, rollNo)
+            .query(`
+    SELECT
+    s.RollNo,
+    s.StudentName,
+    s.ProgramName,
+    s.TotalEarnedCredits,
+    s.CPI,
+    m.MandatoryCourseCredits,
+    d.Semester,
+    p.ProgramID
+FROM ACADEMICS.dbo.VW_SP_StudentCPIDetails s
+INNER JOIN ACADEMICS.dbo.ProgramMaster p
+    ON s.ProgramName = p.ProgramName
+INNER JOIN ACADEMICS.dbo.MandatoryCourseCredits m
+    ON p.ProgramID = m.ProgramID
+INNER JOIN ACADEMICS.dbo.VW_StudentDetails d
+    ON s.RollNo = d.RollNo
+WHERE d.RollNo = @rollNo
+AND d.Semester = 08
+AND d.Batch=m.Batch
+AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 30
+  `);
+
+        console.log("DB Result:", result.recordset);
+
+        res.json(result.recordset);   // VERY IMPORTANT
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 app.get("/api/electives", async (req, res) => {
@@ -207,6 +215,55 @@ AND ElectiveType NOT IN ('Core Courses', 'Audit Courses');
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server error" });
+    }
+});
+
+
+app.get("/api/student/eligibility", async (req, res) => {
+    try {
+        const rollNo = req.query.rollNo;
+
+        if (!rollNo) {
+            return res.status(400).json({ message: "Roll Number is required" });
+        }
+
+        const pool = await poolPromise;
+
+        const result = await pool
+            .request()
+            .input("rollNo", sql.VarChar, rollNo)
+            .query(`
+                SELECT
+                    s.RollNo,
+                    s.TotalEarnedCredits,
+                    m.MandatoryCourseCredits,
+                    (s.TotalEarnedCredits - m.MandatoryCourseCredits) AS ExtraEarnedCredits
+                FROM ACADEMICS.dbo.VW_SP_StudentCPIDetails s
+                INNER JOIN ACADEMICS.dbo.ProgramMaster p
+                    ON s.ProgramName = p.ProgramName
+                INNER JOIN ACADEMICS.dbo.MandatoryCourseCredits m
+                    ON p.ProgramID = m.ProgramID
+                INNER JOIN ACADEMICS.dbo.VW_StudentDetails d
+                    ON s.RollNo = d.RollNo
+                WHERE d.RollNo = @rollNo
+                AND d.Semester = 08
+                AND d.Batch = m.Batch
+            `);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ eligible: false, message: "Student not found" });
+        }
+
+        const extra = result.recordset[0].ExtraEarnedCredits;
+
+        res.json({
+            eligible: extra >= 30,
+            extraEarnedCredits: extra
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
