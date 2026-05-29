@@ -1,0 +1,52 @@
+.student-page{
+    padding:30px;
+    background:#f4f6f9;
+}
+
+.component-section{
+    margin-bottom:20px;
+}
+
+.component-section label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.component-section select{
+    width:250px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #d0d0d0;
+    background:white;
+    color: black;
+}
+
+.student-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+.student-table th{
+    background:#dceeff;
+    padding:12px;
+    color: black;
+}
+
+.student-table td{
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
+
+.filter-input{
+    width:100%;
+    padding:8px;
+}
+
+.paid-dropdown{
+    width:100%;
+    padding:8px;
+    background-color: #eee;
+    color: black;
+}
