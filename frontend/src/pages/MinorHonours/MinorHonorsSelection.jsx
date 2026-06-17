@@ -361,7 +361,7 @@
 import React, { useEffect, useState } from "react";
 import "./MinorHonorsSelection.css";
 import { FaTrash } from "react-icons/fa";
-import { API_URL } from "../config/apiConfig";
+import { API_URL } from "../../config/apiConfig";
 
 const MINOR_COURSES = [
     { CourseName: "Minor in Data Science and Artificial Intelligence" },

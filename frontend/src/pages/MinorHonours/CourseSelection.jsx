@@ -337,8 +337,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CourseSelection.css";
-import { API_URL } from "../config/apiConfig";
+// import "./CourseSelection.css";
+import { API_URL } from "../../config/apiConfig";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const CourseSelection = () => {

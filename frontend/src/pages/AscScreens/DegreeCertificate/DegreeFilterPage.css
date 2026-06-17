@@ -1,0 +1,154 @@
+.degree-filter-page {
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background: #f5f7fb;
+    min-height: 100vh;
+    padding: 24px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+/* HEADER */
+
+.degree-filter-page .dc-filter-header {
+    background: linear-gradient(
+        135deg,
+        #9e2a9ed8,
+        #4A148C
+    );
+    color: white;
+    padding: 28px 35px;
+    border-radius: 16px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 25px rgba(106, 27, 154, 0.25);
+}
+
+.degree-filter-page .dc-filter-header h2 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    color: white;
+}
+
+.degree-filter-page .dc-filter-header p {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: white;
+    opacity: .95;
+}
+
+/* CARD */
+
+.degree-filter-page .dc-filter-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 15px rgba(0,0,0,.08);
+}
+
+.degree-filter-page .dc-filter-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d2d2d;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #ececec;
+}
+
+/* GRID */
+
+.degree-filter-page .dc-filter-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+/* FORM GROUP */
+
+.degree-filter-page .dc-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.degree-filter-page .dc-form-group label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #9e2a9ed8;
+}
+
+.degree-filter-page .dc-form-group select {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    background: white;
+    font-size: 14px;
+    color: #2d2d2d;
+    transition: all .3s ease;
+}
+
+.degree-filter-page .dc-form-group select:focus {
+    outline: none;
+    border-color: #9e2a9ed8;
+    box-shadow:
+        0 0 0 4px rgba(158,42,158,.12);
+}
+
+/* FULL WIDTH */
+
+.degree-filter-page .dc-full-width {
+    grid-column: 1 / -1;
+}
+
+/* BUTTON AREA */
+
+.degree-filter-page .dc-filter-footer {
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* BUTTON */
+
+.degree-filter-page .dc-next-btn {
+    background: #9e2a9ed8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease;
+    box-shadow:
+        0 4px 12px rgba(106,27,154,.25);
+}
+
+.degree-filter-page .dc-next-btn:hover {
+    background: #6A1B9A;
+    transform: translateY(-2px);
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .degree-filter-page {
+        padding: 15px;
+    }
+
+    .degree-filter-page .dc-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .degree-filter-page .dc-filter-footer {
+        justify-content: center;
+    }
+
+    .degree-filter-page .dc-next-btn {
+        width: 100%;
+    }
+}

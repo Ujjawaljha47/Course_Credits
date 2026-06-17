@@ -3,11 +3,13 @@ const axios = require("axios"); // add this at top
 const cors = require('cors');
 const { poolPromise } = require('./config/db');
 const sql = require("mssql");
+const degreeRoutes = require("./routes/degreeCertificateRoutes");
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/api/degree", degreeRoutes);
 
 function findRollNo(obj) {
   if (!obj || typeof obj !== "object") return null;
@@ -86,59 +88,77 @@ app.get('/api/students', async (req, res) => {
 });
 
 
-// app.get("/api/student/me", async (req, res) => {
-//     try {
 
-//         const rollNo = req.query.rollNo;
+app.get('/test-accounts', (req, res) => {
+    res.json([
+        {
+            Name: "Rahul Kumar",
+            "Roll No": "IIT001",
+            Branch: "CSE",
+            Period: "2025-26",
+            Amount: "50000",
+            "Paid Amount": "20000",
+            "Due Date": "15-06-2026",
+            "Transaction No": "TXN1001",
+            "Payment done By": "UPI",
+            "Order No": "ORD001"
+        },
+        {
+            Name: "Priya Sharma",
+            "Roll No": "IIT002",
+            Branch: "ECE",
+            Period: "2025-26",
+            Amount: "45000",
+            "Paid Amount": "20000",
+            "Due Date": "20-06-2026",
+            "Transaction No": "",
+            "Date of Payment": "",
+            "Payment done By": "",
+            "Order No": "ORD002"
+        }
+    ]);
+});
 
-//         if (!rollNo) {
-//             return res.status(400).json({
-//                 message: "Roll Number is required"
-//             });
-//         }
+app.get('/test-sw', (req, res) => {
+    res.json([
+        {
+            Name: "Rahul Kumar",
+            "Roll No": "IIT001",
+            Branch: "CSE",
+            Period: "2025-26",
+            Amount: "50000",
+            "Paid Amount": "20000",
+            "Is Paid?": "Yes",
+            "Verify By": "Admin",
+            "Verify On": "27-05-2026"
+        },
+        {
+            Name: "Priya Sharma",
+            "Roll No": "IIT002",
+            Branch: "ECE",
+            Period: "2025-26",
+            Amount: "45000",
+            "Paid Amount": "25000",
+            "Is Paid?": "No",
+            "Verify By": "Admin",
+            "Verify On": '27-05-2026'
+        }
+    ]);
+});
 
-//         const pool = await poolPromise;
-
-//         const result = await pool
-//             .request()
-//             .input("rollNo", sql.VarChar, rollNo)
-//             .query(`
-// SELECT
-//     s.RollNo,
-//     s.StudentName,
-//     s.ProgramName, 
-//     s.TotalEarnedCredits,
-//     s.CPI,
-//     m.MandatoryCourseCredits,
-//     d.Semester,
-//     p.ProgramID
-// FROM ACADEMICS.dbo.VW_SP_StudentCPIDetails s
-// INNER JOIN ACADEMICS.dbo.ProgramMaster p
-//     ON s.ProgramName = p.ProgramName
-// INNER JOIN ACADEMICS.dbo.MandatoryCourseCredits m
-//     ON p.ProgramID = m.ProgramID
-// INNER JOIN ACADEMICS.dbo.VW_StudentDetails d
-//     ON s.RollNo = d.RollNo
-// WHERE d.RollNo = @rollNo
-// AND d.Semester = 08
-// AND d.Batch=m.Batch
-// AND (s.TotalEarnedCredits - m.MandatoryCourseCredits) >= 0
-// `);
-
-//         if (result.recordset.length === 0) {
-//             return res.status(404).json({
-//                 message: "Student not found"
-//             });
-//         }
-
-//         res.json(result.recordset);
-
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
+app.get('/test-academic', (req, res) => {
+    res.json([
+        {
+            Name: "Rahul Kumar",
+            "Roll No": "IIT001",
+            'Batch': 2023,
+            'Program Name': 'CSE',
+            'Amount': 50000,
+            'Paid Amount': 30000,
+            'Date': '12-04-2026',
+        }
+    ]);
+});
 
 
 

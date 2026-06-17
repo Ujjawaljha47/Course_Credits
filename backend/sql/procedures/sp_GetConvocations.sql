@@ -1,0 +1,3 @@
+SELECT DISTINCT Convocation
+FROM StudentAcademicDetails
+ORDER BY Convocation DESC

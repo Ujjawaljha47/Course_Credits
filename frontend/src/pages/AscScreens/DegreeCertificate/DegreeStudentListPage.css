@@ -1,0 +1,381 @@
+.degree-student-page {
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background: #f5f7fb;
+    min-height: 100vh;
+    padding: 24px;
+}
+
+/* HEADER */
+
+.degree-student-page .dc-page-header {
+    background: linear-gradient(
+        135deg,
+        #9e2a9ed8,
+        #4A148C
+    );
+    color: white;
+    padding: 28px 35px;
+    border-radius: 16px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 25px rgba(106, 27, 154, 0.25);
+}
+
+.degree-student-page .dc-page-header h2 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 6px 0;
+    color: white;
+}
+
+.degree-student-page .dc-page-header p {
+    margin-top: 8px;
+    margin-bottom: 0;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.95;
+}
+
+.dc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* FILTER SUMMARY CARD */
+
+.degree-student-page .dc-summary-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+.degree-student-page .dc-summary-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 10px;
+}
+
+.degree-student-page .dc-summary-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.degree-student-page .dc-summary-item {
+    background: #fafafa;
+    border-left: 4px solid #9e2a9ed8;
+    padding: 14px 18px;
+    border-radius: 12px;
+}
+
+.degree-student-page .dc-summary-item label {
+    display: block;
+    color:#9e2a9ed8;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.degree-student-page .dc-summary-item span {
+    
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/*STUDENT HEADER*/
+
+.degree-student-page .dc-student-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.degree-student-page .dc-student-header h4 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #2d2d2d;
+}
+
+.degree-student-page .dc-record-count {
+    background: #F3E5F5;
+    color: #9e2a9ed8;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.dc-export-wrapper {
+  position: relative;
+}
+
+.dc-export-btn {
+  background: #F3E5F5;
+    color: #9e2a9ed8;
+
+  border: none;
+
+  padding: 8px 16px;
+
+  border-radius: 6px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.dc-export-btn:hover {
+  background: #edbbf5;
+}
+
+.dc-export-menu {
+  position: absolute;
+
+  top: 42px;
+  right: 0;
+
+  width: 170px;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 15px rgba(
+      0,
+      0,
+      0,
+      0.15
+    );
+
+  z-index: 999;
+}
+
+.dc-export-menu button {
+  width: 100%;
+
+  padding: 10px 15px;
+
+  border: none;
+
+  background: white;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.dc-export-menu button:hover {
+  background: #f5f5f5;
+}
+
+/* TABLE */
+
+.degree-student-page .dc-table-wrapper {
+    background: white;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+.degree-student-page .dc-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.degree-student-page .dc-table thead tr {
+    background: #9e2a9ed8;
+    color: #fff;
+}
+
+.degree-student-page .dc-table th {
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.degree-student-page .dc-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.degree-student-page .dc-table tbody tr:hover {
+    background: #eff6ff;
+}
+
+.degree-student-page .dc-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* STATUS BADGES */
+
+.degree-student-page .status-yes {
+    background: #E8F5E9;
+    color: #2E7D32;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.degree-student-page .status-no {
+    background: #FCE4EC;
+    color: #C62828;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+/* PREVIEW BUTTON */
+
+.degree-student-page .dc-preview-btn {
+    background: #9e2a9ed8;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.degree-student-page .dc-preview-btn:hover {
+    background: #6A1B9A;
+    transform: translateY(-1px);
+}
+
+/* PAGINATION */
+
+.degree-student-page .pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 30px;
+    padding: 20px 0;
+}
+
+.degree-student-page .page-btn {
+    background: #9e2a9ed8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 110px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.25);
+}
+
+.degree-student-page .page-btn:hover:not(:disabled) {
+    background: #6A1B9A;
+}
+
+.degree-student-page .page-btn:disabled {
+    background: #d8cde4;
+    color: #8c8c8c;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.degree-student-page .page-indicator {
+    background: #F3E5F5;
+    color: #9e2a9ed8;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    min-width: 120px;
+    text-align: center;
+    border: 1px solid #D1C4E9;
+}
+
+/*  MOBILE */
+
+@media (max-width: 768px) {
+
+    .degree-student-page .dc-student-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .degree-student-page .dc-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .degree-student-page .dc-pagination {
+        flex-direction: column;
+    }
+}
+
+.student-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.student-modal {
+  background: white;
+
+  width: 800px;
+  max-width: 95%;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+
+  font-size: 30px;
+
+  cursor: pointer;
+}
